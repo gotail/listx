@@ -8,108 +8,108 @@ const (
 	expansionCount     = 100000
 )
 
-type listx struct {
+type List struct {
 	mutex sync.RWMutex
 	left  int
 	right int
 	start int
 	end   int
-	data  []interface{}
+	Data  []interface{}
 }
 
-func New() *listx {
-	return &listx{
+func New() *List {
+	return &List{
 		mutex: sync.RWMutex{},
 		left:  halfCap,
 		right: halfCap,
 		start: halfCap - 1,
 		end:   halfCap - 1,
-		data:  make([]interface{}, halfCap*2),
+		Data:  make([]interface{}, halfCap*2),
 	}
 }
 
-func (list *listx) LPush(element interface{}) {
+func (list *List) LPush(element interface{}) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 	list.start = list.start - 1
-	list.data[list.start] = element
+	list.Data[list.start] = element
 	list.expansion()
 }
 
-func (list *listx) RPush(element interface{}) {
+func (list *List) RPush(element interface{}) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 
-	list.data[list.end] = element
+	list.Data[list.end] = element
 
 	list.end = list.end + 1
 	list.expansion()
 }
 
-func (list *listx) LPop() interface{} {
-	v := list.data[list.start]
+func (list *List) LPop() interface{} {
+	v := list.Data[list.start]
 	if v == nil {
 		return nil
 	}
 
 	list.mutex.Lock()
 
-	list.data[list.start] = nil
+	list.Data[list.start] = nil
 	list.start = list.start + 1
 	list.mutex.Unlock()
 	list.expansion()
 	return v
 }
 
-func (list *listx) RPop() interface{} {
+func (list *List) RPop() interface{} {
 
-	v := list.data[list.end-1]
+	v := list.Data[list.end-1]
 	if v == nil {
 		return nil
 	}
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
 
-	list.data[list.end] = nil
+	list.Data[list.end] = nil
 	list.end = list.end - 1
 
 	list.expansion()
 	return v
 }
 
-func (list *listx) Len() int {
+func (list *List) Len() int {
 	return list.end - list.start
 }
 
-func (list *listx) LRange(s, e int) []interface{} {
+func (list *List) LRange(s, e int) []interface{} {
 	if s < 0 || e > list.start+list.end || s >= e {
 		return nil
 	}
-	return list.data[s+list.start : e+list.start]
+	return list.Data[s+list.start : e+list.start]
 }
 
-func (list *listx) LIndex(index int) interface{} {
+func (list *List) LIndex(index int) interface{} {
 	if index < 0 || list.start+index > list.end {
 		return nil
 	}
 	list.mutex.RLock()
 	defer list.mutex.RUnlock()
 
-	return list.data[list.start+index]
+	return list.Data[list.start+index]
 }
 
-func (list *listx) expansion() {
+func (list *List) expansion() {
 	if list.start <= expansionThreshold {
 		newLeft := make([]interface{}, expansionCount)
-		newLeft = append(newLeft, list.data...)
-		list.data = newLeft
+		newLeft = append(newLeft, list.Data...)
+		list.Data = newLeft
 		list.start = expansionCount + list.start - 1
 		list.end = expansionCount + list.end - 1
 		list.left = expansionCount + list.left
 	} else if list.right-list.end <= expansionThreshold {
 		newRight := make([]interface{}, expansionCount)
-		newRight = append(list.data, newRight...)
-		list.data = newRight
+		newRight = append(list.Data, newRight...)
+		list.Data = newRight
 		list.right = expansionCount + list.right
 	}
 }
