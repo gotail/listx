@@ -20,9 +20,9 @@ func TestListx_LRange(t *testing.T) {
 
 	myList := New()
 
-	for i := 0; i < 1000; i++ {
-		myList.RPush(i)
-	}
+	//for i := 0; i < 1000; i++ {
+	//	myList.RPush(i)
+	//}
 
-	fmt.Println(myList.LRange(0, 5))
+	fmt.Println(myList.LRange(1, 5))
 }

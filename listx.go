@@ -1,9 +1,12 @@
 package listx
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 const (
-	halfCap            = 100000
+	halfCap            = 10000
 	expansionThreshold = 8000
 	expansionCount     = 100000
 )
@@ -82,9 +85,15 @@ func (list *List) Len() int {
 }
 
 func (list *List) LRange(s, e int) []interface{} {
-	if s < 0 || e > list.start+list.end || s >= e {
+	if s < 0 || s >= e {
 		return nil
 	}
+
+	if e > list.end-list.start {
+		fmt.Println("***** ", list.end)
+		e = list.end - list.start
+	}
+
 	return list.Data[s+list.start : e+list.start]
 }
 
