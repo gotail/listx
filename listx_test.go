@@ -1,7 +1,6 @@
 package listx
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -20,9 +19,20 @@ func TestListx_LRange(t *testing.T) {
 
 	myList := New()
 
-	//for i := 0; i < 1000; i++ {
-	//	myList.RPush(i)
-	//}
+	for i := 0; i < 10000000; i++ {
+		myList.RPush(i)
+	}
 
-	fmt.Println(myList.LRange(1, 5))
+	//fmt.Println(myList.LRange(1, 5))
+}
+
+func TestNew(t *testing.T) {
+	count := 8000
+
+	f := make([]interface{}, count)
+	for i := 0; i < count; i++ {
+		v := New()
+		f[i] = v
+		v.LPush("lskdjf")
+	}
 }

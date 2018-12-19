@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	halfCap            = 1000
-	expansionThreshold = 100
-	expansionCount     = 10000
+	halfCap            = 100
+	expansionThreshold = 10
+	expansionCount     = 1000
 )
 
 type List struct {
