@@ -1,7 +1,6 @@
 package listx
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -85,16 +84,22 @@ func (list *List) Len() int {
 }
 
 func (list *List) LRange(s, e int) []interface{} {
+
 	if s < 0 || s >= e {
 		return nil
 	}
 
-	if e > list.end-list.start {
-		fmt.Println("***** ", list.end)
-		e = list.end - list.start
+	s = s + list.start
+	e = e + list.start
+
+	if s > list.start {
+		s = list.start
+	}
+	if e > list.end {
+		e = list.end
 	}
 
-	return list.Data[s+list.start : e+list.start]
+	return list.Data[s:e]
 }
 
 func (list *List) LIndex(index int) interface{} {
