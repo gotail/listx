@@ -79,6 +79,18 @@ func (list *List) RPop() interface{} {
 	return v
 }
 
+func (list *List) Del(index int) int {
+	if list.start+index > list.end || index < 0 || list.start == list.end {
+		return -1 // 超出索引
+	}
+
+	index = list.start + index
+	list.Data = append(list.Data[:index-1], list.Data[index:]...)
+
+	list.end = list.end - 1
+	return 1
+}
+
 func (list *List) Len() int {
 	return list.end - list.start
 }

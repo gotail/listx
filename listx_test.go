@@ -1,8 +1,30 @@
 package listx
 
 import (
+	"strconv"
 	"testing"
+	"time"
 )
+
+func TestList_Del(t *testing.T) {
+	count := 800000
+	f := make([]interface{}, count)
+	v := New()
+	for i := 0; i < count; i++ {
+		f[i] = v
+		v.RPush("lskdjf-" + strconv.Itoa(i))
+	}
+
+	start := time.Now()
+	for i := 0; i < 5000; i++ {
+		//t.Log(v.Len(), v.LIndex(0))
+		v.Del(0)
+		//t.Log(v.Len(), v.LIndex(0))
+	}
+	t.Log(v.Len(), v.LIndex(0))
+	t.Log(time.Since(start))
+
+}
 
 func TestX(t *testing.T) {
 	myList := New()
