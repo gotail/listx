@@ -45,7 +45,11 @@ func TestListx_LRange(t *testing.T) {
 		myList.RPush(i)
 	}
 
-	//fmt.Println(myList.LRange(1, 5))
+	start := time.Now()
+	for i := 0; i < 5000000; i++ {
+		myList.LRange(1, 5)
+	}
+	t.Log(time.Since(start))
 }
 
 func TestNew(t *testing.T) {

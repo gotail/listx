@@ -41,42 +41,33 @@ func (list *List) LPush(element interface{}) {
 func (list *List) RPush(element interface{}) {
 	list.mutex.Lock()
 	defer list.mutex.Unlock()
-
 	list.Data[list.end] = element
-
 	list.end = list.end + 1
 	list.expansion()
 }
 
-func (list *List) LPop() interface{} {
-	v := list.Data[list.start]
-	if v == nil {
-		return nil
+func (list *List) LPop() (p interface{}) {
+	if p = list.Data[list.start]; p != nil {
+		list.mutex.Lock()
+		defer list.mutex.Unlock()
+
+		list.Data[list.start] = nil
+		list.start = list.start + 1
+		list.expansion()
 	}
-
-	list.mutex.Lock()
-
-	list.Data[list.start] = nil
-	list.start = list.start + 1
-	list.mutex.Unlock()
-	list.expansion()
-	return v
+	return p
 }
 
-func (list *List) RPop() interface{} {
+func (list *List) RPop() (p interface{}) {
+	if p = list.Data[list.end-1]; p != nil {
+		list.mutex.Lock()
+		defer list.mutex.Unlock()
 
-	v := list.Data[list.end-1]
-	if v == nil {
-		return nil
+		list.Data[list.end] = nil
+		list.end = list.end - 1
+		list.expansion()
 	}
-	list.mutex.Lock()
-	defer list.mutex.Unlock()
-
-	list.Data[list.end] = nil
-	list.end = list.end - 1
-
-	list.expansion()
-	return v
+	return p
 }
 
 func (list *List) Del(index int) int {
@@ -96,7 +87,6 @@ func (list *List) Len() int {
 }
 
 func (list *List) LRange(s, e int) []interface{} {
-
 	if s < 0 || s >= e {
 		return nil
 	}
@@ -111,7 +101,7 @@ func (list *List) LRange(s, e int) []interface{} {
 		e = list.end
 	}
 
-	return list.Data[s:e]
+	return list.Data[s:e:e]
 }
 
 func (list *List) LIndex(index int) interface{} {
