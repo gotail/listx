@@ -91,8 +91,8 @@ func (list *List) LRange(s, e int) []interface{} {
 		return nil
 	}
 
-	s = s + list.start
-	e = e + list.start
+	s += list.start
+	e += list.start
 
 	if s > list.start {
 		s = list.start
