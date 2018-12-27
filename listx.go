@@ -12,10 +12,10 @@ const (
 
 type List struct {
 	mutex sync.RWMutex
-	left  int
-	right int
-	start int
-	end   int
+	left  uint32
+	right uint32
+	start uint32
+	end   uint32
 	Data  []interface{}
 }
 
@@ -70,7 +70,7 @@ func (list *List) RPop() (p interface{}) {
 	return p
 }
 
-func (list *List) Del(index int) int {
+func (list *List) Del(index uint32) int {
 	if list.start+index > list.end || index < 0 || list.start == list.end {
 		return -1 // 超出索引
 	}
@@ -82,11 +82,11 @@ func (list *List) Del(index int) int {
 	return 1
 }
 
-func (list *List) Len() int {
+func (list *List) Len() uint32 {
 	return list.end - list.start
 }
 
-func (list *List) LRange(s, e int) []interface{} {
+func (list *List) LRange(s, e uint32) []interface{} {
 	if s < 0 || s >= e {
 		return nil
 	}
@@ -104,7 +104,7 @@ func (list *List) LRange(s, e int) []interface{} {
 	return list.Data[s:e:e]
 }
 
-func (list *List) LIndex(index int) interface{} {
+func (list *List) LIndex(index uint32) interface{} {
 	if index < 0 || list.start+index > list.end {
 		return nil
 	}
