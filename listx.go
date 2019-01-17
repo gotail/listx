@@ -94,7 +94,7 @@ func (list *List) LRange(s, e uint32) []interface{} {
 	s += list.start
 	e += list.start
 
-	if s > list.start {
+	if s < list.start {
 		s = list.start
 	}
 	if e > list.end {

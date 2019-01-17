@@ -1,6 +1,7 @@
 package listx
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 	"time"
@@ -45,11 +46,14 @@ func TestListx_LRange(t *testing.T) {
 		myList.RPush(i)
 	}
 
-	start := time.Now()
-	for i := 0; i < 5000000; i++ {
-		myList.LRange(1, 5)
-	}
-	t.Log(time.Since(start))
+	//start := time.Now()
+	//for i := 0; i < 5000000; i++ {
+	//	myList.LRange(1, 5)
+	//}
+	//t.Log(time.Since(start))
+
+	x := myList.LRange(5, 10)
+	fmt.Println(x)
 }
 
 func TestNew(t *testing.T) {
